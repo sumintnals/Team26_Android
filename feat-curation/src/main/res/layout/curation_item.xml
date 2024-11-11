@@ -17,6 +17,9 @@
             name="imageUrl"
             type="String" />
         <variable
+            name="imageUrl"
+            type="String" />
+        <variable
             name="position"
             type="Integer" />
         <variable

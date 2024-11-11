@@ -22,8 +22,6 @@ fun setImageUrl(imageView: ImageView, path: String?, placeHolder: Drawable?) {
         return
     }
 
-    Log.d("Adapter called", "Hi")
-
     Glide.with(imageView.context)
         .load(path)
         .placeholder(ph)

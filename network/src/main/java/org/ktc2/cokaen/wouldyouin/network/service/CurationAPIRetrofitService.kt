@@ -4,7 +4,6 @@ import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyCurationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyCurationSliceResponse
 import org.ktc2.cokaen.wouldyouin.data.model.CurationCreateRequestWrapper
 import org.ktc2.cokaen.wouldyouin.data.model.CurationEditRequestWrapper
-import org.ktc2.cokaen.wouldyouin.data.model.CurationSliceResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

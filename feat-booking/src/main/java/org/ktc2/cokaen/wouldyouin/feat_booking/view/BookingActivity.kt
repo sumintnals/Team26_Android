@@ -121,7 +121,7 @@ class BookingActivity : AppCompatActivity() {
 
                 reservationViewModel.kakaoPayResponse.observe(this) { response ->
                     response?.let {
-                        val redirectUrl = it.kakaoPayResponse.nextRedirectMobileUrl
+                        val redirectUrl = it.kakaoPayResponse.nextRedirectPcUrl
                         Log.d("BookingActivity", "결제 URL: $redirectUrl")
                         launchExternalBrowser(redirectUrl) // 웹 브라우저 열기
                         reservationIdFromApi = it.reservationResponse.id

@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.ktc2.cokaen.wouldyouin.core.ToastUtils
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyKakaoPayReservationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyReservationResponse
+import org.ktc2.cokaen.wouldyouin.data.model.KakaoPayReservationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationCreateRequestWrapper
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationRequest
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationResponse
@@ -48,8 +49,11 @@ class ReservationViewModel @Inject constructor(
     val reservationResponse: LiveData<ApiResponseBodyReservationResponse?> get() = _reservationResponse
 
     // 카카오 결제
+    /*
     private val _payResponse = MutableLiveData<String?>()
-    val payResponse: LiveData<String?> get() = _payResponse
+    val payResponse: LiveData<String?> get() = _payResponse*/
+    private val _kakaoPayResponse = MutableLiveData<KakaoPayReservationResponse?>()
+    val kakaoPayResponse: LiveData<KakaoPayReservationResponse?> get() = _kakaoPayResponse
 
     // 전체 예약 목록을 가져오는 메서드
     fun fetchReservationList(page: Int = currentPage, size: Int = 10) {
@@ -95,23 +99,33 @@ class ReservationViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val response = repository.createKakaoPay(request)
-                _payResponse.value = response
-                /*
-                //원본
-                Log.d("ReservationViewModel", "Request Body JSON: $request")
-                if (response == null) {
-                    Log.e("ReservationViewModel", "Response is null")
-                }*/
-                if (!response.isNullOrEmpty()) {
-                    _payResponse.value = response // 단순 URL을 LiveData에 저장
-                    Log.d("ReservationViewModel", "Redirect URL: $response")
+                _kakaoPayResponse.value = response
+                if (response != null) {
+                    Log.d("ReservationViewModel", "KakaoPay Response: $response")
                 } else {
-                    Log.e("ReservationViewModel", "Redirect URL is null or empty")
+                    Log.e("ReservationViewModel", "KakaoPay Response is null")
                 }
             } catch (e: Exception) {
                 Log.e("ReservationViewModel", "Error in createKakaoPay", e)
             }
-
         }
     }
+    /*
+    fun createKakaoPay(request: ReservationRequest) {
+
+        //첫번째 방법
+        viewModelScope.launch {
+            try {
+                val redirectUrl = repository.createKakaoPay(request)
+                _payResponse.value = redirectUrl
+                if (redirectUrl != null) {
+                    Log.d("ReservationViewModel", "Redirect URL: $redirectUrl")
+                } else {
+                    Log.e("ReservationViewModel", "Redirect URL is null")
+                }
+            } catch (e: Exception) {
+                Log.e("ReservationViewModel", "Error in createKakaoPay", e)
+            }
+        }
+    }*/
 }

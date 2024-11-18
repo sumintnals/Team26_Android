@@ -2,11 +2,15 @@ package org.ktc2.cokaen.wouldyouin.network.repository
 
 import android.content.Context
 import android.util.Log
+import com.google.gson.Gson
+import org.json.JSONException
+import org.json.JSONObject
 import org.ktc2.cokaen.wouldyouin.core.ToastUtils
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyKakaoPayReservationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyReservationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.CurationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.CurationSliceResponse
+import org.ktc2.cokaen.wouldyouin.data.model.KakaoPayReservationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationCreateRequestWrapper
 import org.ktc2.cokaen.wouldyouin.network.service.ReservationAPIRetrofitService
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationRequest
@@ -76,19 +80,62 @@ open class ReservationAPIRetrofitRepository @Inject constructor(
     }
 
     //카카오 결제
-    suspend fun createKakaoPay(request: ReservationRequest): String? {  //API 보고 타입 결정
+    /*
+    suspend fun createKakaoPay(request: ReservationRequest): String? {
+
+        //첫번째 방법
         return try {
             val response = retrofitService.createKakaoPay(request)
             if (response.isSuccessful) {
-                //원본
-                //response.body()
-                response.body()?.string()
+                val bodyString = response.body()?.string()
+                Log.d("ReservationRepository", "Raw response: $bodyString")
+
+                // JSON 파싱
+                val jsonObject = JSONObject(bodyString ?: "")
+                val dataObject = jsonObject.getJSONObject("data") // "data" 객체 추출
+                val kakaoPayResponse = dataObject.getJSONObject("kakaoPayResponse") // "kakaoPayResponse" 객체 추출
+                val redirectUrl = kakaoPayResponse.getString("next_redirect_mobile_url") // URL 추출
+
+                Log.d("ReservationRepository", "Extracted Redirect URL: $redirectUrl")
+                redirectUrl
             } else {
-                Log.e("ReservationRepository", "Error creating reservation: ${response.errorBody()?.string()}")
+                Log.e("ReservationRepository", "Error: ${response.errorBody()?.string()}")
                 null
             }
+        } catch (e: JSONException) {
+            Log.e("ReservationRepository", "JSON Parsing Exception", e)
+            null
         } catch (e: Exception) {
-            Log.e("ReservationRepository", "Exception creating reservation", e)
+            Log.e("ReservationRepository", "Exception while creating KakaoPay", e)
+            null
+        }
+    }*/
+    suspend fun createKakaoPay(request: ReservationRequest): KakaoPayReservationResponse? {
+        return try {
+            val response = retrofitService.createKakaoPay(request)
+            if (response.isSuccessful) {
+                val bodyString = response.body()?.string()
+                Log.d("ReservationRepository", "Raw response: $bodyString")
+
+                // JSON 파싱
+                val jsonObject = JSONObject(bodyString ?: "")
+                val dataObject = jsonObject.getJSONObject("data") // "data" 객체 추출
+
+                val kakaoPayResponse = Gson().fromJson(
+                    dataObject.toString(),
+                    KakaoPayReservationResponse::class.java
+                )
+                Log.d("ReservationRepository", "Parsed KakaoPayResponse: $kakaoPayResponse")
+                kakaoPayResponse
+            } else {
+                Log.e("ReservationRepository", "Error: ${response.errorBody()?.string()}")
+                null
+            }
+        } catch (e: JSONException) {
+            Log.e("ReservationRepository", "JSON Parsing Exception", e)
+            null
+        } catch (e: Exception) {
+            Log.e("ReservationRepository", "Exception while creating KakaoPay", e)
             null
         }
     }

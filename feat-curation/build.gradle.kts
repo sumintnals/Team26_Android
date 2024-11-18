@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.androidx.appcompat.v161)
     implementation(libs.material)
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.swiperefreshlayout)
     kapt(libs.google.dagger.hilt.compiler)
 
     // Coroutines

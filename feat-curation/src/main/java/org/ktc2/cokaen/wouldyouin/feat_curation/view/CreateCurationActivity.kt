@@ -57,10 +57,7 @@ class CreateCurationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateCurationBinding
     private var currentPosition: Int = -1
     private var isEditMode = false
-    private val curatorID: Long = 1
-    private lateinit var imagesAdapter: CreateBlockImagesAdapter
     private lateinit var selectedEventsAdapter: SelectedEventsAdapter
-    private lateinit var eventsAdapter: SelectedEventsAdapter
 
     // 어댑터는 하나의 인스턴스만 유지
     private val adapter by lazy {
@@ -166,13 +163,8 @@ class CreateCurationActivity : AppCompatActivity() {
     }
 
     private fun setUpSelectedEventsView() {
-        val selectedEventsAdapter = SelectedEventsAdapter(viewModel)
-
-        binding.rvSelectedEvents.apply {
-            adapter = selectedEventsAdapter
-            layoutManager = LinearLayoutManager(this@CreateCurationActivity)
-            setHasFixedSize(true)
-        }
+        selectedEventsAdapter = SelectedEventsAdapter(viewModel)
+        binding.rvSelectedEvents.adapter = selectedEventsAdapter
 
         // 이벤트 데이터 변경 관찰
         viewModel.eventDataList.observe(this) { events ->
@@ -197,11 +189,6 @@ class CreateCurationActivity : AppCompatActivity() {
             // 블록 추가 버튼 상태
             isAddBlockButtonEnabled.observe(this@CreateCurationActivity) { isEnabled ->
                 binding.addCurationBlockButton.isEnabled = isEnabled
-            }
-
-            // 이벤트 데이터
-            viewModel.eventDataList.observe(this@CreateCurationActivity) { events ->
-                selectedEventsAdapter.submitList(events)
             }
 
             isFormValid.observe(this@CreateCurationActivity) { isValid ->
@@ -412,46 +399,21 @@ class CreateCurationActivity : AppCompatActivity() {
         })
     }
 
-    private fun checkCurationTitle() {
-        binding.etTitle.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                val title = s.toString().trim()
-                if (title.isEmpty()) {
-                    binding.etTitle.error = "제목을 입력해주세요."
-                } else {
-                    binding.etTitle.error = null
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-    }
+//    private val imageResult = registerForActivityResult(
+//        ActivityResultContracts.StartActivityForResult()
+//    ) { result ->
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val imageUri = result.data?.data ?: return@registerForActivityResult
+//            val path = absolutelyPath(imageUri, this)
+//            viewModel.uploadImageFromPath(path, currentPosition)
+//        }
+//    }
 
 
-    private fun checkCurationBody() {
-        binding.etContent.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                val body = s.toString().trim()
-                if (body.length in 20..1000) {
-                    binding.etContent.error = null
-                } else {
-                    binding.etContent.error = "본문은 20자 이상, 1000자 이내여야 합니다."
-                }
-            }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-    }
-
-    private val imageResult = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val imageUri = result.data?.data ?: return@registerForActivityResult
-            val path = absolutelyPath(imageUri, this)
-            viewModel.uploadImageFromPath(path, currentPosition)
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            viewModel.uploadImageFromUri(it, currentPosition)
         }
     }
 
@@ -499,14 +461,18 @@ class CreateCurationActivity : AppCompatActivity() {
         }
     }
 
+//    private fun openGallery() {
+//        val intent = Intent(Intent.ACTION_PICK).apply {
+//            setDataAndType(
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                "image/*"
+//            )
+//        }
+//        imageResult.launch(intent)
+//    }
+
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK).apply {
-            setDataAndType(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                "image/*"
-            )
-        }
-        imageResult.launch(intent)
+        getContent.launch("image/*")
     }
 
 

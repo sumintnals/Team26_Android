@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:text="@{block.subtitle}"
+            android:textColor="@color/black"
             android:textSize="22sp"
             android:textStyle="bold"
             tools:text="Block Title" />
@@ -43,6 +44,7 @@
             android:layout_marginHorizontal="20dp"
             android:text="@{block.content}"
             android:textSize="18sp"
+            android:textColor="@color/black"
             tools:text="Block Content" />
 
     </LinearLayout>

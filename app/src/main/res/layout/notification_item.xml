@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@{imageUrl}" />
+            circleImageUrl="@{imageUrl}" />
 
         <TextView
             android:id="@+id/organizer_name"
@@ -55,11 +55,12 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/ellipsis"
-            android:rotation="90" />
+            android:src="@drawable/heart_fill"
+            app:tint="#FF4081"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

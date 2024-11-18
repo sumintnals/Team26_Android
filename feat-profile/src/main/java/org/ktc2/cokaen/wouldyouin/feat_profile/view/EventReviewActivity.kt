@@ -68,10 +68,10 @@ class EventReviewActivity : AppCompatActivity() {
                         reviewAdapter.submitList(reviews)
                         if (reviews.isEmpty()) {
                             binding.recyclerView.visibility = View.GONE
-                            binding.emptyView.visibility = View.VISIBLE
+                            binding.emptyPendingView.visibility = View.VISIBLE
                         } else {
                             binding.recyclerView.visibility = View.VISIBLE
-                            binding.emptyView.visibility = View.GONE
+                            binding.emptyPendingView.visibility = View.GONE
                         }
                     }
                 }

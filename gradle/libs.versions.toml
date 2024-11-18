@@ -45,6 +45,7 @@ roomCommon = "2.6.1"
 roomKtx = "2.6.1"
 transportRuntime = "4.0.0"
 securityCryptoKtx = "1.1.0-alpha06"
+swiperefreshlayout = "1.1.0"
 
 
 [libraries]
@@ -107,6 +108,7 @@ androidx-room-common = { group = "androidx.room", name = "room-common", version.
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 transport-runtime = { group = "com.google.android.datatransport", name = "transport-runtime", version.ref = "transportRuntime" }
 androidx-security-crypto-ktx = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "securityCryptoKtx" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "androidGradlePlugin" }

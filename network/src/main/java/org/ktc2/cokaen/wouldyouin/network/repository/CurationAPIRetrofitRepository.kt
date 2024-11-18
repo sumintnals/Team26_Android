@@ -156,7 +156,7 @@ open class CurationAPIRetrofitRepository @Inject constructor(
     suspend fun getCurationsByCurator(
         curationId: Long,
         page: Int = 0,
-        size: Int = 10,
+        size: Int = 6,
         lastId: Long = Long.MAX_VALUE
     ): CurationSliceResponse {
         try {

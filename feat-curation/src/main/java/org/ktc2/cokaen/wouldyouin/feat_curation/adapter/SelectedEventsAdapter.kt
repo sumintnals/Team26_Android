@@ -38,24 +38,22 @@ class SelectedEventsAdapter(
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
-        holder.bind(event)
 
-        // 삭제 버튼 클릭 처리
-        holder.binding.deleteButton.setOnClickListener {
-            viewModel.deleteEvent(position)
-            // notifyItemRemoved는 필요 없음 - ViewModel에서 새 리스트를 제공할 것이기 때문
+        holder.binding.apply {
+            searchEventData = event  // 데이터 클래스 직접 바인딩
+            imageUrl = event.imageUrl  // 이미지 URL 바인딩
+
+            // 삭제 버튼 클릭 리스너
+            deleteButton.setOnClickListener {
+                viewModel.deleteEvent(position)
+            }
+
+            // 바인딩 즉시 실행
+            executePendingBindings()
         }
     }
 
     inner class EventViewHolder(val binding: SelectedEventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(event: SearchEventData) {
-            binding.apply {
-                eventTitle.text = event.eventName
-                hostName.text = event.hostName
-                imageUrl = event.imageUrl
-                executePendingBindings()
-            }
-        }
     }
 }

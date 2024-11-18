@@ -79,7 +79,13 @@ class HomeCurationFragment : Fragment() {
             }
         })
 
-        binding.createCurationButton.visibility = if (authPrefs.memberType == MemberType.curator.name) View.VISIBLE else View.GONE
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.resetPagination()
+            viewModel.loadCurationList()
+            binding.swipeRefresh.isRefreshing = false
+        }
+
+//        binding.createCurationButton.visibility = if (authPrefs.memberType == MemberType.curator.name) View.VISIBLE else View.GONE
 
         // RecyclerView에 Adapter 설정
         binding.curationCard.apply {
@@ -172,6 +178,11 @@ class HomeCurationFragment : Fragment() {
             Log.d("DropDown", "Changed")
         }
         Log.d("EMPTY", "Observer setup completed")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadCurationList()
     }
 
     override fun onDestroyView() {

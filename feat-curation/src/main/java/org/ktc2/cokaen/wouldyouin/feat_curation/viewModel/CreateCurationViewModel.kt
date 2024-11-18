@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -341,6 +342,7 @@ class CreateCurationViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
+
                 val hashtags = _hashtags.value?.let { value ->
                     if (value.startsWith("#")) {
                         value.substring(1) // 첫 번째 # 제거
@@ -353,17 +355,33 @@ class CreateCurationViewModel @Inject constructor(
                             .filterNot { it.isEmpty() }
                     }
                 } ?: listOf()
-                val curationCards = _curationBlocks.value?.map { it.toCurationCardRequest() } ?: listOf()
+                val escapedContent = _content.value?.escapeNewLines() ?: ""
+//                val curationCards = _curationBlocks.value?.map { it.toCurationCardRequest() } ?: listOf()
                 val eventIds = _eventDataList.value?.map { it.eventId } ?: listOf()
-
-                val requestBody = CurationCreateRequest(
-                        title = _title.value ?: "",
-                        content = _content.value ?: "",
-                        curationCards = curationCards,
-                        area = _selectedRegion.value ?: "전체",
-                        hashtags = hashtags,
-                        eventIds = eventIds
+                val curationCards = _curationBlocks.value?.map { block ->
+                    CurationCardRequest(
+                        subtitle = block.title.escapeNewLines(),
+                        content = block.body.escapeNewLines(),
+                        imageIds = block.images.map { it.id }
                     )
+                } ?: listOf()
+
+//                val requestBody = CurationCreateRequest(
+//                        title = _title.value ?: "",
+//                        content = _content.value ?: "",
+//                        curationCards = curationCards,
+//                        area = _selectedRegion.value ?: "전체",
+//                        hashtags = hashtags,
+//                        eventIds = eventIds
+//                    )
+                val requestBody = CurationCreateRequest(
+                    title = _title.value?.escapeNewLines() ?: "",
+                    content = escapedContent,
+                    curationCards = curationCards,
+                    area = _selectedRegion.value ?: "전체",
+                    hashtags = hashtags,
+                    eventIds = eventIds
+                )
 
                 Log.d("RequestBody", "${requestBody}")
 
@@ -408,6 +426,62 @@ class CreateCurationViewModel @Inject constructor(
 
             val MAX_IMAGES = 5
             updateAddImageButtonState(blockPosition, updatedImages.size < MAX_IMAGES)
+        }
+    }
+
+    fun uploadImageFromUri(uri: Uri, position: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            var originalBitmap: Bitmap? = null
+            var scaledBitmap: Bitmap? = null
+            var cleanBitmap: Bitmap? = null
+
+            try {
+                // URI에서 직접 InputStream 얻기
+                val inputStream = context.contentResolver.openInputStream(uri)
+                originalBitmap = BitmapFactory.decodeStream(inputStream)
+                inputStream?.close()
+
+                if (originalBitmap == null) {
+                    throw IllegalStateException("Failed to decode image from URI: $uri")
+                }
+
+                scaledBitmap = scaleBitmap(originalBitmap)
+                cleanBitmap = cleanImage(scaledBitmap)
+
+                // MultipartBody.Part 생성
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                cleanBitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream)
+                val imageBytes = byteArrayOutputStream.toByteArray()
+
+                val requestBody = imageBytes.toRequestBody("image/png".toMediaTypeOrNull())
+                val part = MultipartBody.Part.createFormData(
+                    "images",
+                    "image_${System.currentTimeMillis()}.png",
+                    requestBody
+                )
+
+                // 이미지 업로드
+                val imageResponse = commonRepository.uploadImageWithPart(part, "CURATION")
+                Log.d("ImageUpload", "이미지 업로드 성공, 응답: $imageResponse")
+
+                val currentBlocks = _curationBlocks.value?.toMutableList() ?: return@launch
+                if (position < currentBlocks.size) {
+                    val currentBlock = currentBlocks[position]
+                    currentBlocks[position] = currentBlock.copy(
+                        images = currentBlock.images + imageResponse
+                    )
+                    _curationBlocks.value = currentBlocks
+                }
+            } catch (e: Exception) {
+                Log.e("ImageUpload", "Upload failed", e)
+                ToastUtils.showShortToast(context, e.message ?: "이미지 업로드에 실패했습니다")
+            } finally {
+                _isLoading.value = false
+                originalBitmap?.recycle()
+                scaledBitmap?.recycle()
+                cleanBitmap?.recycle()
+            }
         }
     }
 
@@ -662,6 +736,12 @@ class CreateCurationViewModel @Inject constructor(
 
     fun showError(s: String) {
         ToastUtils.showShortToast(context, s)
+    }
+
+    fun String.escapeNewLines(): String {
+        return this.replace("\r\n", "\\n")
+            .replace("\n", "\\n")
+            .replace("\r", "\\n")
     }
 }
 sealed class NavigationEvent {

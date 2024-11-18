@@ -39,12 +39,23 @@
         </androidx.appcompat.widget.Toolbar>
 
         <TextView
+            android:id="@+id/pending_review_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="작성할 리뷰"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/hintText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintTop_toBottomOf="@id/pending_review_text"
             android:text="관람 종료된 행사 중, 리뷰를 작성하지 않은 목록이 보여집니다.\n작성해주신 후기는 행사 주최자에게 전달됩니다."
             android:textSize="12sp"
             android:textColor="#5D5D5D"
@@ -64,7 +75,7 @@
             android:padding="16dp" />
 
         <LinearLayout
-            android:id="@+id/emptyView"
+            android:id="@+id/emptyPendingView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

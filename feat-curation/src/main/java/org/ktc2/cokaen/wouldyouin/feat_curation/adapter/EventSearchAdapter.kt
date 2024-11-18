@@ -41,6 +41,8 @@ class EventSearchAdapter(
             itemView.setOnClickListener {
                 onEventClick.invoke(event)
             }
+
+            binding.executePendingBindings()
         }
     }
 

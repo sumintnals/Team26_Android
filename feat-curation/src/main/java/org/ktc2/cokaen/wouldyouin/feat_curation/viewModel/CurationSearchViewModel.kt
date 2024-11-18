@@ -37,11 +37,6 @@ class CurationSearchViewModel @Inject constructor(
     private var isLastPage: Boolean = false
     private var currentPage: Int = 0
 
-
-    init {
-        loadEventList()
-    }
-
     fun loadEventList(page: Int = currentPage, size: Int = 10) {
         if (isLoading.value == true || isLastPage) return
 
@@ -51,14 +46,16 @@ class CurationSearchViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val response = repository.getAllEvents(page, size, lastId)
+                val newList = (_eventList.value.orEmpty() + response.events).distinctBy { it.id }
+                _eventList.value = newList  // postValue 대신 value 사용
+
                 if (response.events.isNotEmpty()) {
-                    _eventList.postValue((_eventList.value.orEmpty() + response.events).distinctBy { it.id })
                     lastId = response.events.last().id
                     currentPage++
-                    _isEmpty.value = false
+                    _isEmpty.value = newList.isEmpty()  // 전체 리스트 기준으로 판단
                 } else {
                     isLastPage = true
-                    _isEmpty.value = true
+                    _isEmpty.value = newList.isEmpty()
                 }
             } catch (e: Exception) {
                 ToastUtils.showShortToast(context, e.message ?: "이벤트 목록 조회에 실패했습니다. 다시 시도해주세요.")

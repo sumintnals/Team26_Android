@@ -47,6 +47,11 @@ class HostLikesFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadLikes()
+    }
+
     private fun setupRecyclerView() {
         val adapter = LikedHostAdapter()
 
@@ -63,7 +68,7 @@ class HostLikesFragment : Fragment() {
                 val success = viewModel.postLike(member.memberId, MemberType.host)
                 if (success) {
                     ToastUtils.showShortToast(requireContext(), "${member.nickname} 좋아요가 취소되었습니다.")
-
+                    viewModel.loadLikes()
                     // UI 업데이트: 리스트에서 항목 제거 후 갱신
                     val updatedList = adapter.currentList.filter { it.memberId != member.memberId }
                     adapter.submitList(updatedList)

@@ -51,6 +51,11 @@ class CuratorLikesFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadLikes()
+    }
+
     private fun setupRecyclerView() {
         val adapter = LikedCuratorAdapter()
 
@@ -81,7 +86,6 @@ class CuratorLikesFragment : Fragment() {
 
         adapter.onItemClick = { member ->
             startMemberProfileActivity(member.memberId)
-            ToastUtils.showShortToast(requireContext(),"${member.nickname} clicked!")
         }
 
         // 클릭 이벤트 처리
@@ -90,6 +94,7 @@ class CuratorLikesFragment : Fragment() {
                 val success = viewModel.postLike(member.memberId, MemberType.curator)
                 if (success) {
                     ToastUtils.showShortToast(requireContext(), "${member.nickname} 좋아요가 취소되었습니다.")
+                    viewModel.loadLikes()
 
                     // UI 업데이트: 리스트에서 항목 제거 후 갱신
                     val updatedList = adapter.currentList.filter { it.memberId != member.memberId }

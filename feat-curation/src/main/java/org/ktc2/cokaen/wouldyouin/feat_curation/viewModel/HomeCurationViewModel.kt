@@ -68,7 +68,7 @@ class HomeCurationViewModel @Inject constructor(
         }
     }
 
-    private fun resetPagination() {
+    fun resetPagination() {
         currentPage = 0
         lastId = Long.MAX_VALUE // 초기 lastId로 리셋
         isLastPage = false

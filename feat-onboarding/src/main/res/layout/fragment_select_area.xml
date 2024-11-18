@@ -16,7 +16,7 @@
             android:id="@+id/titleTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="80dp"
             android:gravity="center"
             android:text="성별과 지역을 선택해 주세요"
             android:textColor="@color/black"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="지역별 큐레이션 추천을 위해\n정보가 필요합니다"
+            android:text="예매 정보 확인 및\n지역별 큐레이션 추천을 위해\n정보가 필요합니다"
             android:textColor="#666666"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -131,6 +131,66 @@
                 android:maxLength="13"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/privacyPolicyLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="개인정보 처리방침 바로가기"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/phoneNumberInputLayout" />
+
+        <TextView
+            android:id="@+id/privacyPolicyContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="수집하는 개인정보는 서비스 제공 목적으로만 활용되며, 법령에 따라 보호됩니다. 자세한 내용은 개인정보 처리방침을 참고해 주세요."
+            android:textColor="#666666"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/privacyPolicyLabel" />
+
+        <RadioGroup
+            android:id="@+id/privacyRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/privacyPolicyContent">
+
+            <RadioButton
+                android:id="@+id/agreeRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:text="동의" />
+
+            <RadioButton
+                android:id="@+id/disagreeRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="미동의" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/privacyWarningText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="※ 개인정보 수집에 동의하지 않을 경우 서비스를 이용할 수 없습니다."
+            android:textColor="#FF4444"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/privacyRadioGroup" />
 
         <ProgressBar
             android:id="@+id/progressBar"

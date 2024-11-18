@@ -39,6 +39,27 @@ class SelectAreaViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(OnboardingUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _phoneNumber = MutableStateFlow<String?>(null)
+    val phonenumber: StateFlow<String?> = _phoneNumber
+
+    private var _privacyAgreed: Boolean? = null
+
+    fun updatePrivacyAgreement(agreed: Boolean) {
+        _privacyAgreed = agreed
+        checkNextButtonState()
+    }
+
+    private fun checkNextButtonState() {
+        val currentState = _uiState.value
+        _uiState.value = currentState.copy(
+            isNextButtonEnabled = !currentState.isLoading
+                    && _selectedGender != null
+                    && _selectedRegion != null
+                    && _phoneNumber != null
+                    && _privacyAgreed == true  // 개인정보 동의 여부 추가
+        )
+    }
+
     data class OnboardingUiState(
         val isLoading: Boolean = false,
         val error: String? = null,

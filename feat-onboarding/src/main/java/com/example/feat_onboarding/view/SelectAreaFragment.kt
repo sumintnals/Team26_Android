@@ -2,6 +2,8 @@ package com.example.feat_onboarding.view
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -46,6 +48,7 @@ class SelectAreaFragment : Fragment() {
         setupNextButton()
         setupPhoneNumberText()
         observeViewModel()
+        setupPrivacyRadioGroup()
     }
 
     private fun setupPhoneNumberText() {
@@ -130,6 +133,37 @@ class SelectAreaFragment : Fragment() {
         }
     }
 
+    private fun setupPrivacyRadioGroup() {
+        binding.privacyRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.agreeRadioButton -> {
+                    viewModel.updatePrivacyAgreement(true)
+                    binding.privacyWarningText.visibility = View.GONE
+                }
+                R.id.disagreeRadioButton -> {
+                    viewModel.updatePrivacyAgreement(false)
+                    binding.privacyWarningText.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        binding.privacyPolicyLabel.apply {
+            text = "개인정보 처리방침"
+            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+            setOnClickListener{
+                openWebPage("https://oval-learning-685.notion.site/142f26889c56808b8e60fd6a603cfd89?pvs=74")
+            }
+        }
+    }
+
+    private fun openWebPage(url: String) {
+        val webpage: Uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, webpage)
+        startActivity(intent)
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -142,18 +176,5 @@ class SelectAreaFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun startMainActivity() {
-        navigationUtil.navigate(
-            NavigationCommand(
-                destination = NavigationDestination.Activity(DeepLinkDestinations.MAIN_ACTIVITY),
-                activityOptions = ActivityNavigationOptions(
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK,
-                    clearTop = true
-                )
-            )
-        )
-        requireActivity().finish()
     }
 }

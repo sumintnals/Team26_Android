@@ -32,11 +32,18 @@ interface ReservationAPIRetrofitService {
         @Body request: ReservationRequest
     ): Response<ApiResponseBodyReservationResponse>
 
-    //카카오 결제
+
+    //첫번째 방법
     @POST("/api/reservations")
     suspend fun createKakaoPay(
         @Body request: ReservationRequest
     ): Response<ResponseBody> //Response<String>
+    /*
+    //두번째 방법
+    @POST("/api/reservations")
+    suspend fun createKakaoPay(
+        @Body request: ReservationRequest
+    ): Response<Void>*/
 
     @GET("/api/reservations/{reservationId}")
     suspend fun getReservation(

@@ -79,37 +79,6 @@ open class ReservationAPIRetrofitRepository @Inject constructor(
         }
     }
 
-    //카카오 결제
-    /*
-    suspend fun createKakaoPay(request: ReservationRequest): String? {
-
-        //첫번째 방법
-        return try {
-            val response = retrofitService.createKakaoPay(request)
-            if (response.isSuccessful) {
-                val bodyString = response.body()?.string()
-                Log.d("ReservationRepository", "Raw response: $bodyString")
-
-                // JSON 파싱
-                val jsonObject = JSONObject(bodyString ?: "")
-                val dataObject = jsonObject.getJSONObject("data") // "data" 객체 추출
-                val kakaoPayResponse = dataObject.getJSONObject("kakaoPayResponse") // "kakaoPayResponse" 객체 추출
-                val redirectUrl = kakaoPayResponse.getString("next_redirect_mobile_url") // URL 추출
-
-                Log.d("ReservationRepository", "Extracted Redirect URL: $redirectUrl")
-                redirectUrl
-            } else {
-                Log.e("ReservationRepository", "Error: ${response.errorBody()?.string()}")
-                null
-            }
-        } catch (e: JSONException) {
-            Log.e("ReservationRepository", "JSON Parsing Exception", e)
-            null
-        } catch (e: Exception) {
-            Log.e("ReservationRepository", "Exception while creating KakaoPay", e)
-            null
-        }
-    }*/
     suspend fun createKakaoPay(request: ReservationRequest): KakaoPayReservationResponse? {
         return try {
             val response = retrofitService.createKakaoPay(request)

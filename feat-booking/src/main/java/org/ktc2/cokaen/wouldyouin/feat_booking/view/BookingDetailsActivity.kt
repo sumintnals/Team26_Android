@@ -39,6 +39,7 @@ class BookingDetailsActivity : AppCompatActivity() {
 
     }
 
+    /*
     private fun setupObservers() {
         viewModel.reservation.observe(this) { currentReservation ->
             currentReservation?.let { reservation ->
@@ -79,7 +80,49 @@ class BookingDetailsActivity : AppCompatActivity() {
         viewModel.isLoading.observe(this) { isLoading ->
             binding.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
+    }*/
+    private fun setupObservers() {
+        // reservation LiveData 관찰
+        viewModel.reservation.observe(this) { currentReservation ->
+            currentReservation?.let { reservation ->
+                // UI 업데이트
+                binding.apply {
+                    imageUrl = reservation.event.thumbnailUrl
+                    eventName.text = reservation.event.title
+                    eventLocation.text = reservation.event.location.detailAddress
+                    eventDate.text = DateTimeUtils.formatDetailTimeString(reservation.event.startTime)
+                    paymentDate.text = "${DateTimeUtils.formatDetailTimeString(reservation.reservationDate)} 예매"
+                    paymentAmount.text = "₩${reservation.price}"
+                    reservationNumber.text = reservation.id.toString()
+                    bookerName.text = reservation.member.nickname
+                    ticketQuantity.text = reservation.quantity.toString()
+
+                    btnBack.setOnClickListener {
+                        finish()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        intent.getStringExtra("reservationId")?.toLongOrNull()?.let { id ->
+                            viewModel?.deleteReservation(id, reservation.event.startTime)
+                        }
+                    }
+                }
+            }
+        }
+
+        // 삭제 성공 여부 관찰
+        viewModel.deletionSuccess.observe(this) { success ->
+            if (success) {
+                finish()  // 성공 시 화면 종료
+            }
+        }
+
+        // 로딩 상태 관찰
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
     }
+
 
     private fun loadReservationData() {
         val reservationId = intent.getStringExtra("reservationId")?.toLongOrNull()

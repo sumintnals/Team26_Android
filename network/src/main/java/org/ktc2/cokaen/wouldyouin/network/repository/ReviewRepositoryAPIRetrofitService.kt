@@ -7,6 +7,7 @@ import org.ktc2.cokaen.wouldyouin.data.model.CurationSliceResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ReviewCreateRequest
 import org.ktc2.cokaen.wouldyouin.data.model.ReviewEventSliceResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ReviewResponse
+import org.ktc2.cokaen.wouldyouin.data.model.ReviewSliceResponse
 import org.ktc2.cokaen.wouldyouin.network.service.ReviewAPIRetrofitService
 import retrofit2.HttpException
 import java.io.IOException
@@ -89,9 +90,9 @@ class ReviewRepositoryAPIRetrofitService @Inject constructor(
         page: Int = 0,
         size: Int = 10,
         lastId: Long = Long.MAX_VALUE
-    ): ReviewEventSliceResponse {
+    ): ReviewSliceResponse {
         try {
-            val response = retrofitService.getReviewEvents(page, size, lastId)
+            val response = retrofitService.getReviews(page, size, lastId)
             return when {
                 response.isSuccessful -> {
                     response.body()?.let { body ->

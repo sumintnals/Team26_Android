@@ -49,6 +49,7 @@
                         android:layout_gravity="center"
                         processedTitle="@{viewModel.curation.title}"
                         android:textSize="18sp"
+                        android:textColor="@color/black"
                         android:textStyle="bold"/>
 
                 </androidx.appcompat.widget.Toolbar>
@@ -111,7 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     processedTitle="@{viewModel.curation.title}"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="20dp"

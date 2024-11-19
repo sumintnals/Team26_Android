@@ -51,6 +51,7 @@ class EventDetailActivity : AppCompatActivity() {
 
         eventViewModel.eventDetails.observe(this) { eventResponse ->
             eventResponse?.let { event ->
+                binding.plannerName.text = event.data?.host?.nickname
                 binding.eventName.text = event.data?.title
                 binding.eventTime.text = event.data?.startTime?.let(DateTimeUtils::formatDateTimeString) ?: "시간 정보 없음"
                 binding.eventEndTime.text = event.data?.endTime?.let(DateTimeUtils::formatDateTimeString) ?: "시간 정보 없음"

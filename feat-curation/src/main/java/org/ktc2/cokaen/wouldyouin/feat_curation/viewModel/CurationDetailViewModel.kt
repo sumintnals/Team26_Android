@@ -48,11 +48,24 @@ class CurationDetailViewModel @Inject constructor(
             try {
                 val curationDetail = curationRepository.getCurationDetail(curationId)
 
-                // CurationResponse 값을 변수에 적용
-                _curation.value = curationDetail
-                _curationBlocks.value = curationDetail.curationCards
-                _hashtags.value = curationDetail.hashtags
-                _curationEvents.value = curationDetail.eventsInfo
+                // 첫 번째 큐레이션 카드의 이미지 리스트 수정
+                val modifiedCurationDetail = if (curationDetail.curationCards.isNotEmpty()) {
+                    val modifiedCards = curationDetail.curationCards.mapIndexed { index, card ->
+                        if (index == 0) {
+                            card.copy(imageUrls = card.imageUrls.drop(1))
+                        } else {
+                            card
+                        }
+                    }
+                    curationDetail.copy(curationCards = modifiedCards)
+                } else {
+                    curationDetail
+                }
+
+                _curation.value = modifiedCurationDetail
+                _curationBlocks.value = modifiedCurationDetail.curationCards
+                _hashtags.value = modifiedCurationDetail.hashtags
+                _curationEvents.value = modifiedCurationDetail.eventsInfo
 
             } catch (e: Exception) {
                 ToastUtils.showShortToast(context, e.message ?: "큐레이션 상세 정보 조회에 실패했습니다. 다시 시도해주세요.")

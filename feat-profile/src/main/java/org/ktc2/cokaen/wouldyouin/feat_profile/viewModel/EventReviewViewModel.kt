@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import org.ktc2.cokaen.wouldyouin.core.ToastUtils
 import org.ktc2.cokaen.wouldyouin.data.model.ReviewCreateRequest
 import org.ktc2.cokaen.wouldyouin.data.model.ReviewEventResponse
+import org.ktc2.cokaen.wouldyouin.data.model.ReviewResponse
 import org.ktc2.cokaen.wouldyouin.network.repository.ReservationAPIRetrofitRepository
 import org.ktc2.cokaen.wouldyouin.network.repository.ReviewRepositoryAPIRetrofitService
 import javax.inject.Inject
@@ -27,50 +28,87 @@ class EventReviewViewModel @Inject constructor(
     private val _pendingReviews = MutableStateFlow<List<ReviewEventResponse>>(emptyList())
     val pendingReviews = _pendingReviews.asStateFlow()
 
-    private val _loading = MutableStateFlow(false)
-    val loading = _loading.asStateFlow()
+    private val _completedReviews = MutableStateFlow<List<ReviewResponse>>(emptyList())
+    val completedReviews = _completedReviews.asStateFlow()
+
+    private val _pendingloading = MutableStateFlow(false)
+    val pendingloading = _pendingloading.asStateFlow()
+
+    private val _reviewLoading = MutableStateFlow(false)
+    val reviewLoading = _reviewLoading.asStateFlow()
 
     private val _reviewSubmitResult = MutableSharedFlow<Boolean>()
     val reviewSubmitResult = _reviewSubmitResult.asSharedFlow()
 
-    private var lastId: Long = Long.MAX_VALUE
-    private var isLastPage: Boolean = false
-    private var currentPage: Int = 0
+    private var lastEventId: Long = Long.MAX_VALUE
+    private var isLastEventPage: Boolean = false
+    private var currentEventPage: Int = 0
+
+    private var lastReviewId: Long = Long.MAX_VALUE
+    private var isLastReviewPage: Boolean = false
+    private var currentReviewPage: Int = 0
 
     init {
         loadPendingReviewList()
     }
 
-    fun loadPendingReviewList(page: Int = currentPage, size: Int = 10) {
-        if (_loading.value || isLastPage) return
+    fun loadPendingReviewList(page: Int = currentEventPage, size: Int = 10) {
+        if (_pendingloading.value || isLastEventPage) return
 
-        _loading.value = true
+        _pendingloading.value = true
         viewModelScope.launch {
             try {
-                val response = repository.getPendingReviewList(page, size, lastId)
+                val response = repository.getPendingReviewList(page, size, lastEventId)
                 val reviewEvents = response.reviewEvents ?: emptyList()  // null이 아닌 빈 리스트로 처리
                 if (reviewEvents.isNotEmpty()) {
                     val newList = _pendingReviews.value.orEmpty() + reviewEvents.distinctBy { it.eventId }
                     _pendingReviews.value = newList
-                    lastId = reviewEvents.last().eventId
-                    currentPage++
+                    lastEventId = reviewEvents.last().eventId
+                    currentEventPage++
                     Log.d("EventReviewViewModel", "Loaded reviews: ${response.reviewEvents}")
                 } else {
-                    isLastPage = true
+                    isLastEventPage = true
                 }
 
             } catch (e: Exception) {
                 ToastUtils.showShortToast(context, "후기 작성 대기중인 행사 목록을 불러오는 데 실패했습니다. 다시 시도해 주세요.")
                 Log.e("EventReviewViewModel", "Error loading review list", e)
             } finally {
-                _loading.value = false
+                _pendingloading.value = false
+            }
+        }
+    }
+
+    fun loadCompleteReviewList(page: Int = currentReviewPage, size: Int = 10) {
+        if (_reviewLoading.value || isLastReviewPage) return
+
+        _reviewLoading.value = true
+        viewModelScope.launch {
+            try {
+                val response = repository.getReviewList(page, size, lastReviewId)
+                val reviewEvents = response.reviews ?: emptyList()  // null이 아닌 빈 리스트로 처리
+                if (reviewEvents.isNotEmpty()) {
+                    val newList = _completedReviews.value.orEmpty() + reviewEvents.distinctBy { it.id }
+                    _completedReviews.value = newList
+                    lastReviewId = reviewEvents.last().id
+                    currentReviewPage++
+                    Log.d("EventReviewViewModel", "Loaded reviews: ${response.reviews}")
+                } else {
+                    isLastReviewPage = true
+                }
+
+            } catch (e: Exception) {
+                ToastUtils.showShortToast(context, "후기 작성 대기중인 행사 목록을 불러오는 데 실패했습니다. 다시 시도해 주세요.")
+                Log.e("EventReviewViewModel", "Error loading review list", e)
+            } finally {
+                _reviewLoading.value = false
             }
         }
     }
 
     fun submitReview(review: ReviewCreateRequest) {
         viewModelScope.launch {
-            _loading.value = true
+            _pendingloading.value = true
             try {
                 repository.createReview(review)
                 removePendingReview(review.eventId)
@@ -79,7 +117,7 @@ class EventReviewViewModel @Inject constructor(
                 Log.e("EventReviewViewModel", "Error submitting review", e)
                 _reviewSubmitResult.emit(false)
             } finally {
-                _loading.value = false
+                _pendingloading.value = false
             }
         }
     }

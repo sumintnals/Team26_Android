@@ -20,6 +20,8 @@ data class MemberResponse(
     val gender: String,
     val intro: String,
     val likes: Int,
+
+    @SerializedName("hashtag")
     val hashtags: List<String>
 )
 

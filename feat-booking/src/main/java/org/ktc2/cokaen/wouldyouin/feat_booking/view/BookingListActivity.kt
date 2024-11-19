@@ -81,12 +81,6 @@ class BookingListActivity : AppCompatActivity() {
                 LinearLayoutManager.VERTICAL,
                 false
             )
-            addItemDecoration(
-                DividerItemDecoration(
-                    this@BookingListActivity,
-                    DividerItemDecoration.VERTICAL
-                )
-            )
 
             addItemDecoration(object : RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(
@@ -95,17 +89,26 @@ class BookingListActivity : AppCompatActivity() {
                     parent: RecyclerView,
                     state: RecyclerView.State
                 ) {
-                    // 원하는 간격을 dp 단위로 설정
                     val spacing = TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
                         8f, // 8dp
                         resources.displayMetrics
                     ).toInt()
 
+                    val position = parent.getChildAdapterPosition(view)
+                    val itemCount = parent.adapter?.itemCount ?: 0
+
                     outRect.top = spacing
-                    outRect.bottom = spacing
+
+                    // 마지막 아이템은 bottom 간격을 0으로 설정
+                    if (position == itemCount - 1) {
+                        outRect.bottom = 0
+                    } else {
+                        outRect.bottom = spacing
+                    }
                 }
             })
+
 
             bookingAdapter.setOnItemClickListener { reservation ->
                 startActivityTo(reservation.id)

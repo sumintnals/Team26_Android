@@ -36,6 +36,7 @@
             app:layout_constraintStart_toStartOf="@id/postImage"
             app:layout_constraintTop_toBottomOf="@id/postImage"
             android:text="@{postTitle}"
+            android:textColor="@color/black"
             tools:text="post title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

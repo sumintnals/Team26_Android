@@ -37,6 +37,7 @@
 
                 <TextView
                     android:id="@+id/nickname"
+                    android:textColor="@color/black"
                     android:layout_marginStart="14dp"
                     android:layout_marginEnd="10dp"
                     android:layout_width="wrap_content"
@@ -78,6 +79,7 @@
 
                 <TextView
                     android:id="@+id/like"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/nickname"
@@ -91,6 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="@id/like"
                     app:layout_constraintBottom_toBottomOf="@id/like"
                     app:layout_constraintStart_toEndOf="@id/like"
@@ -115,6 +118,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toStartOf="@id/hashtag"
                     android:maxLines="5"
+                    android:textColor="@color/black"
                     android:layout_marginStart="20dp"
                     android:layout_marginVertical="10dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -140,6 +144,7 @@
                     app:layout_constraintStart_toEndOf="@id/emailIcon"
                     app:layout_constraintTop_toTopOf="@id/emailIcon"
                     android:layout_marginStart="5dp"
+                    android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@id/emailIcon"
                     android:textSize="14sp"
                     tools:text="yourEmail@email.com"
@@ -166,6 +171,7 @@
                         android:layout_marginBottom="10dp"
                         android:textStyle="bold"
                         android:textSize="16dp"
+                        android:textColor="@color/black"
                         android:text="작성한 큐레이션"/>
 
                     <androidx.recyclerview.widget.RecyclerView

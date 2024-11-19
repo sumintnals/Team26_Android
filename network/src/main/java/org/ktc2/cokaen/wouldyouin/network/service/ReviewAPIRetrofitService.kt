@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.network.service
 
+import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodReviewSliceResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyReviewEventSliceResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyReviewResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ReviewCreateRequest
@@ -27,5 +28,5 @@ interface ReviewAPIRetrofitService {
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 10,
         @Query("lastId") lastId: Long = Long.MAX_VALUE
-    ): Response<ApiResponseBodyReviewEventSliceResponse>
+    ): Response<ApiResponseBodReviewSliceResponse>
 }

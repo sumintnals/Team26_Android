@@ -43,7 +43,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginHorizontal="20dp"
             android:text="@{block.content}"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="@color/black"
             tools:text="Block Content" />
 

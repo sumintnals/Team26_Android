@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp"
+        android:textColor="@color/black"
         android:background="@drawable/rounded_background"
         android:layout_marginBottom="16dp">
 
@@ -50,8 +51,8 @@
                 android:text="@{eventResponse.hostNickname}"
                 android:layout_marginTop="5dp"
                 tools:text="주최자"
-                android:textSize="14sp"
-                android:textColor="#666666" />
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/eventDate"
@@ -59,8 +60,8 @@
                 android:layout_height="wrap_content"
                 tools:text="2024.07.15.15:00"
                 android:layout_marginTop="5dp"
-                android:textSize="14sp"
-                android:textColor="#666666" />
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/eventLocation"
@@ -69,8 +70,9 @@
                 android:layout_marginTop="10dp"
                 android:text="@{eventResponse.location.detailAddress}"
                 android:textSize="14sp"
+                android:textColor="@color/black"
                 tools:text="광주 문화전당로 보헤미안 소극장"
-                android:textColor="#666666" />
+                />
         </LinearLayout>
     </LinearLayout>
 </layout>

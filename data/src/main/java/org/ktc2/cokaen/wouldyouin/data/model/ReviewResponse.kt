@@ -10,18 +10,24 @@ data class ApiResponseBodyReviewResponse(
 )
 
 //리뷰 리스트
-data class ApiResponseBodyListReviewResponse(
+data class ApiResponseBodReviewSliceResponse(
     @SerializedName("success")
     val success: Boolean,
 
     @SerializedName("data")
-    val data: List<ReviewResponse>,
+    val data: ReviewSliceResponse,
 
     @SerializedName("code")
     val code: String,
 
     @SerializedName("message")
     val message: String
+)
+
+data class ReviewSliceResponse(
+    val reviews: List<ReviewResponse>,
+
+    val sliceInfo: SliceInfo
 )
 
 data class ReviewResponse(

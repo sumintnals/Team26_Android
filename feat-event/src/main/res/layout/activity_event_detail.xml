@@ -173,7 +173,7 @@
                 android:textColor="@color/purple_200"
                 android:textSize="14sp"
                 android:layout_marginBottom="16dp"
-                android:drawableStart="@drawable/person"
+                android:drawableStart="@drawable/personproflie"
                 android:drawablePadding="4dp"
                 android:layout_marginTop="4dp"/>
 
@@ -215,7 +215,7 @@
                     android:layout_height="60dp"
                     android:src="@drawable/logo"
                     android:scaleType="centerCrop"
-                    imageUrl="@{organizerImageUrl}"/>
+                    circleImageUrl="@{organizerImageUrl}"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -246,7 +246,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="프로필 보기"
-                        android:textColor="@color/teal_200"
+                        android:layout_gravity="end"
+                        android:textColor="#FF4081"
                         android:textSize="14sp"
                         android:layout_marginTop="4dp"/>
                 </LinearLayout>
@@ -288,9 +289,9 @@
                 android:layout_marginBottom="16dp">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/phone"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/phonenum"
                     android:layout_marginEnd="8dp"/>
 
                 <TextView
@@ -318,6 +319,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="예매하기"
+                android:backgroundTint="@android:color/darker_gray"
+                android:background="@drawable/rounded_background"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="24dp"/>

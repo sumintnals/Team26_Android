@@ -56,23 +56,36 @@ class HostProfileActivity : AppCompatActivity() {
 
         // ViewModel의 데이터를 관찰하여 UI 업데이트
         profileViewModel.memberProfile.observe(this) { memberResponse ->
+            Log.d("HostProfileActivity", "1. Raw memberResponse: $memberResponse")
+
             memberResponse?.data?.let { member ->
-                Log.d("HostProfileActivity", "Member data fetched: ${member.hashtags}")
+                Log.d("HostProfileActivity", "2. Member object: $member")
+                Log.d("HostProfileActivity", "3. Member hashtags: ${member.hashtags}")
+                Log.d("HostProfileActivity", "4. Hashtags type: ${member.hashtags::class.java}")
+
                 binding.nickname.text = member.nickname
                 binding.role.text = member.memberType
                 binding.likes.text = member.likes.toString()
                 binding.intro.text = member.intro
                 binding.email.text = member.email
 
-                // 해시태그 리사이클러뷰
-                member.hashtags?.let { hashtags ->
-                    setupHashtagRecyclerView(hashtags)
+                // 해시태그 처리를 더 상세하게 로깅
+                when {
+                    member.hashtags == null -> {
+                        Log.e("HostProfileActivity", "5. Hashtags is null")
+                    }
+                    member.hashtags.isEmpty() -> {
+                        Log.d("HostProfileActivity", "6. Hashtags is empty list")
+                    }
+                    else -> {
+                        Log.d("HostProfileActivity", "7. Hashtags found: ${member.hashtags.size} items")
+                        setupHashtagRecyclerView(member.hashtags)
+                    }
                 }
 
-                //프로필 이미지
                 binding.imageUrl = member.profileUrl
-                //관객 리뷰(리사이클러뷰)
-
+            } ?: run {
+                Log.e("HostProfileActivity", "Member data is null")
             }
         }
 

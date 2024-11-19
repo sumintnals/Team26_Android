@@ -67,17 +67,17 @@ class EventReviewActivity : AppCompatActivity() {
                     viewModel.pendingReviews.collect { reviews ->
                         reviewAdapter.submitList(reviews)
                         if (reviews.isEmpty()) {
-                            binding.recyclerView.visibility = View.GONE
+                            binding.pendingReviewRecyclerView.visibility = View.GONE
                             binding.emptyPendingView.visibility = View.VISIBLE
                         } else {
-                            binding.recyclerView.visibility = View.VISIBLE
+                            binding.pendingReviewRecyclerView.visibility = View.VISIBLE
                             binding.emptyPendingView.visibility = View.GONE
                         }
                     }
                 }
 
                 launch {
-                    viewModel.loading.collect { isLoading ->
+                    viewModel.pendingloading.collect { isLoading ->
                         binding.progressBar.isVisible = isLoading && viewModel.pendingReviews.value.isEmpty()
                     }
                 }
@@ -94,12 +94,9 @@ class EventReviewActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        binding.recyclerView.apply {
+        binding.pendingReviewRecyclerView.apply {
             adapter = reviewAdapter
             layoutManager = LinearLayoutManager(this@EventReviewActivity)
-            addItemDecoration(
-                DividerItemDecoration(this@EventReviewActivity, DividerItemDecoration.VERTICAL)
-            )
 
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -108,7 +105,7 @@ class EventReviewActivity : AppCompatActivity() {
                     val totalItemCount = layoutManager.itemCount
                     val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
-                    if (!viewModel.loading.value && totalItemCount <= lastVisibleItem + 5) {
+                    if (!viewModel.pendingloading.value && totalItemCount <= lastVisibleItem + 5) {
                         viewModel.loadPendingReviewList()
                     }
                 }

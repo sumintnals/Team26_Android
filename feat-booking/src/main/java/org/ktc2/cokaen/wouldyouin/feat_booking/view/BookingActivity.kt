@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import org.ktc2.cokaen.wouldyouin.core.DateTimeUtils
+import org.ktc2.cokaen.wouldyouin.core.ToastUtils
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationCreateRequestWrapper
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationRequest
 import org.ktc2.cokaen.wouldyouin.feat_booking.databinding.ActivityBookingBinding
@@ -134,6 +135,7 @@ class BookingActivity : AppCompatActivity() {
                             Log.e("BookingActivity", "예매 생성 실패: ${response?.message}")
                             Log.e("BookingActivity", "Response Code: ${response?.code}")
                             Log.e("BookingActivity", "Response Body: ${response?.message}")
+                            ToastUtils.showShortToast(this@BookingActivity, "남은 좌석이 부족합니다.")
                         }
                     }
                 }

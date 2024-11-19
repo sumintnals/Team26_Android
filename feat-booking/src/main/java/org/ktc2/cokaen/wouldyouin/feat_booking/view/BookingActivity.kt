@@ -150,18 +150,8 @@ class BookingActivity : AppCompatActivity() {
         startActivity(intent)
     }*/
 
-    /*
-    override fun onResume() {
-        super.onResume()
-        val reservationId = intent.getStringExtra("reservationId")
-        if (!reservationId.isNullOrEmpty()) {
-            val intent = Intent(this, BookingDetailsActivity::class.java).apply {
-                putExtra("reservationId", reservationId)
-            }
-            startActivity(intent)
-            Log.d("BookingActivity", "Navigating to BookingDetailsActivity with reservationId: $reservationId")
-        }
-    }*/
+    }
+
 
     override fun onNewIntent(intent: Intent) {
         Log.d("BookingActivity", "돌아옴")
@@ -181,41 +171,6 @@ class BookingActivity : AppCompatActivity() {
         Log.d("BookingActivity", "Updating total price: $totalPrice")
         binding.price.text = "₩ $totalPrice"
     }
-
-    /*
-    //첫
-    private fun handleDeepLink(intent: Intent) {
-        val uri = intent.data
-        if (uri != null && uri.scheme == "wouldyouin" && uri.host == "booking") {
-            val path = uri.path
-            if (path == "/payment/check") {
-                val action = uri.lastPathSegment // 마지막 경로를 가져옴
-                when (action) {
-                    "payment_approve" -> {
-                        Log.i("DeepLinkHandler", "Payment approved")
-                        val reservationId = uri.getQueryParameter("reservationId")
-                        val intent = Intent(this, BookingDetailsActivity::class.java).apply {
-                            putExtra("reservationId", bookingId)
-                        }
-                        startActivity(intent)
-                    }
-                    "payment_failed" -> {
-                        Log.i("DeepLinkHandler", "Payment failed")
-                        Toast.makeText(this, "결제가 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                    }
-                    "payment_cancel" -> {
-                        Log.i("DeepLinkHandler", "Payment canceled")
-                        Toast.makeText(this, "결제가 취소되었습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                    else -> Log.w("DeepLinkHandler", "Unknown payment action: $action")
-                }
-            } else {
-                Log.w("DeepLinkHandler", "Unknown path: $path")
-            }
-        } else {
-            Log.w("DeepLinkHandler", "Invalid deep link: ${uri?.toString()}")
-        }
-    }*/
 
     /*
     //최근 사용

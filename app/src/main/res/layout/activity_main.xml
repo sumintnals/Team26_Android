@@ -35,7 +35,7 @@
             android:layout_gravity="bottom"
             app:menu="@menu/bottom_nav_menu"
             android:background="?android:attr/windowBackground"
-            app:itemIconSize="50dp"
+            app:itemIconSize="24dp"
             app:itemPaddingBottom="4dp"
             app:labelVisibilityMode="labeled"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

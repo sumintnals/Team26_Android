@@ -49,14 +49,10 @@ class ReservationViewModel @Inject constructor(
     val reservationResponse: LiveData<ApiResponseBodyReservationResponse?> get() = _reservationResponse
 
     // 카카오 결제
-    /*
-    private val _payResponse = MutableLiveData<String?>()
-    val payResponse: LiveData<String?> get() = _payResponse*/
-    private val _kakaoPayResponse = MutableLiveData<KakaoPayReservationResponse?>()
-    val kakaoPayResponse: LiveData<KakaoPayReservationResponse?> get() = _kakaoPayResponse
+    private val _kakaoPayResponse = MutableLiveData<String?>()
+    val kakaoPayResponse: LiveData<String?> get() = _kakaoPayResponse
 
-    private val _kakaoPayLiveData = MutableLiveData<KakaoPayReservationResponse?>()
-    val kakaoPayLiveData: LiveData<KakaoPayReservationResponse?> = _kakaoPayLiveData
+
 
     // 전체 예약 목록을 가져오는 메서드
     fun fetchReservationList(page: Int = currentPage, size: Int = 10) {
@@ -101,8 +97,12 @@ class ReservationViewModel @Inject constructor(
     fun createKakaoPay(request: ReservationRequest) {
         viewModelScope.launch {
             try {
+                // Repository에서 URL 문자열을 반환
                 val response = repository.createKakaoPay(request)
+
+                // LiveData에 URL 값을 설정
                 _kakaoPayResponse.value = response
+
                 if (response != null) {
                     Log.d("ReservationViewModel", "KakaoPay Response: $response")
                 } else {
@@ -113,36 +113,5 @@ class ReservationViewModel @Inject constructor(
             }
         }
     }
-    /*
-    fun createKakaoPay(request: ReservationRequest) {
-
-        //첫번째 방법
-        viewModelScope.launch {
-            try {
-                val redirectUrl = repository.createKakaoPay(request)
-                _payResponse.value = redirectUrl
-                if (redirectUrl != null) {
-                    Log.d("ReservationViewModel", "Redirect URL: $redirectUrl")
-                } else {
-                    Log.e("ReservationViewModel", "Redirect URL is null")
-                }
-            } catch (e: Exception) {
-                Log.e("ReservationViewModel", "Error in createKakaoPay", e)
-            }
-        }
-    }*/
-
-    /*
-    fun getKakaoPayData() {
-        viewModelScope.launch {
-            val response = repository.fetchKakaoPayData()
-            if (response != null) {
-                Log.d("KakaoPayViewModel", "KakaoPay data received: $response")
-                _kakaoPayLiveData.postValue(response)
-            } else {
-                Log.e("KakaoPayViewModel", "Failed to fetch KakaoPay data")
-            }
-        }
-    }*/
 
 }

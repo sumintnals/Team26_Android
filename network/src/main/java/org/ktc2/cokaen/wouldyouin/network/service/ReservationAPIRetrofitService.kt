@@ -37,7 +37,7 @@ interface ReservationAPIRetrofitService {
     @POST("/api/reservations")
     suspend fun createKakaoPay(
         @Body request: ReservationRequest
-    ): Response<ResponseBody> //Response<String>
+    ): Response<ResponseBody>
 
     @GET("/api/reservations/{reservationId}")
     suspend fun getReservation(

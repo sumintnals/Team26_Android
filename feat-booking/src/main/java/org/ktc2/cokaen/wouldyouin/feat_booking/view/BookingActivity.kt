@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONException
+import org.json.JSONObject
 import org.ktc2.cokaen.wouldyouin.core.DateTimeUtils
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationCreateRequestWrapper
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationRequest
@@ -78,21 +80,21 @@ class BookingActivity : AppCompatActivity() {
             }
         }
 
-        //이게 맞음
+
         binding.payButton.setOnClickListener {
             eventId?.let { id ->
                 val quantity = binding.numberPicker.value
                 val reservationRequest = ReservationRequest(eventId = id, quantity = quantity)
                 Log.d("BookingActivity", "결제 요청: $reservationRequest")
+
+                // KakaoPay 요청 호출
                 reservationViewModel.createKakaoPay(reservationRequest)
 
-                reservationViewModel.kakaoPayResponse.observe(this) { response ->
-                    response?.let {
-                        val redirectUrl = it.kakaoPayResponse.nextRedirectPcUrl
-                        Log.d("BookingActivity", "결제 URL: $redirectUrl")
-                        launchExternalBrowser(redirectUrl) // 웹 브라우저 열기
-                        reservationIdFromApi = it.reservationResponse.id
-                        Log.d("BookingActivity", "ReservationId: $reservationIdFromApi")
+                // KakaoPay URL 관찰
+                reservationViewModel.kakaoPayResponse.observe(this) { redirectUrl ->
+                    redirectUrl?.let {
+                        Log.d("BookingActivity", "Received KakaoPay redirect URL: $redirectUrl")
+                        launchExternalBrowser(redirectUrl) // URL을 브라우저에서 열기
                     } ?: run {
                         Log.e("BookingActivity", "KakaoPay Response is null")
                         Toast.makeText(this, "결제 URL을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
@@ -103,7 +105,6 @@ class BookingActivity : AppCompatActivity() {
                 Toast.makeText(this, "이벤트 ID를 확인할 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
 
@@ -126,55 +127,6 @@ class BookingActivity : AppCompatActivity() {
         binding.price.text = "₩ $totalPrice"
     }
 
-    /*
-    //최근 사용
-    private fun handleDeepLink(intent: Intent) {
-        val uri = intent.data
-        if (uri != null && uri.scheme == "wouldyouin" && uri.host == "booking") {
-            val path = uri.path
-            if (path == "/payment/check") {
-                val action = uri.getQueryParameter("action") // 액션 추출
-                //val reservationId = uri.getQueryParameter("reservationId")?.toLongOrNull()
-                val reservationId = reservationIdFromApi
-                when (action) {
-                    "payment_approve" -> {
-                        Log.i("DeepLinkHandler", "Payment approved")
-                        /*
-                        if (reservationId != null) {
-                            navigateToBookingDetails(reservationId)
-                        } else {
-                            Log.e("DeepLinkHandler", "Reservation ID is null")
-                        }*/
-                        //val reservationId = uri.getQueryParameter("reservationId")?.toLongOrNull()
-                        if (reservationId != null) {
-                            val intent = Intent(this, BookingDetailsActivity::class.java).apply {
-                                putExtra("reservationId", reservationId.toString())
-                            }
-                            startActivity(intent)
-                            Toast.makeText(this, "결제 성공.", Toast.LENGTH_SHORT).show()
-                        } else {
-                            //Log.e("DeepLinkHandler", "Reservation ID is null or invalid")
-                            Toast.makeText(this, "결제 정보가 올바르지 않습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    "payment_failed" -> {
-                        Log.i("DeepLinkHandler", "Payment failed")
-                        Toast.makeText(this, "결제가 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                    }
-                    "payment_cancel" -> {
-                        Log.i("DeepLinkHandler", "Payment canceled")
-                        Toast.makeText(this, "결제가 취소되었습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                    else -> Log.w("DeepLinkHandler", "Unknown payment action: $action")
-                }
-            } else {
-                Log.w("DeepLinkHandler", "Unknown path: $path")
-            }
-        } else {
-            Log.w("DeepLinkHandler", "Invalid deep link: ${uri?.toString()}")
-        }
-    }*/
-
     private fun handleDeepLink(intent: Intent) {
         val uri = intent.data
         if (uri != null && uri.scheme == "wouldyouin" && uri.host == "booking") {
@@ -187,13 +139,6 @@ class BookingActivity : AppCompatActivity() {
                 when (action) {
                     "payment_approve" -> {
                         Log.i("DeepLinkHandler", "Payment approved")
-                        /*
-                        if (reservationId != null) {
-                            navigateToBookingDetails(reservationId)
-                        } else {
-                            Log.e("DeepLinkHandler", "Reservation ID is null")
-                        }*/
-                        //val reservationId = uri.getQueryParameter("reservationId")?.toLongOrNull()
                         if (reservationId != null) {
                             val intent = Intent(this, BookingDetailsActivity::class.java).apply {
                                 putExtra("reservationId", reservationId.toString())

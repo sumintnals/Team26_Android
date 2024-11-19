@@ -60,8 +60,8 @@
 
             <ImageView
                 android:id="@+id/createCurationButton"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/square_and_pencil"
                 app:layout_constraintEnd_toEndOf="parent"

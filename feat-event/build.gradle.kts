@@ -53,7 +53,6 @@ dependencies {
 
     // Hilt
     implementation(libs.google.dagger.hilt.android)
-    implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.fragment.ktx)
     kapt(libs.google.dagger.hilt.compiler)
 
@@ -75,6 +74,9 @@ dependencies {
     implementation("com.kakao.maps.open:android:2.9.5")
 
     implementation("com.google.android.gms:play-services-location:21.1.0")
+
+    implementation("com.github.jgabrielfreitas:BlurImageView:1.0.1")
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
 
     implementation(libs.androidx.security.crypto.ktx)
 }

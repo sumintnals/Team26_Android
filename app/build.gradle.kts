@@ -111,6 +111,7 @@ dependencies {
     implementation(project(":feat-onboarding"))
     implementation("com.kakao.sdk:v2-all:2.20.3")
     implementation("com.kakao.maps.open:android:2.9.5")
+    implementation("com.github.jgabrielfreitas:BlurImageView:1.0.1")
 
     kapt(libs.google.dagger.hilt.compiler)
     implementation(libs.google.dagger.hilt.android)

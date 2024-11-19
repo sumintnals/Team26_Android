@@ -23,7 +23,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             // Configure Kotlin compiler options
             tasks.withType<KotlinCompile>().configureEach {
                 kotlinOptions {
-                    jvmTarget = JavaVersion.VERSION_1_8.toString()
+                    jvmTarget = JavaVersion.VERSION_17.toString()
                 }
             }
         }

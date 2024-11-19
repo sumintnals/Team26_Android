@@ -1,12 +1,20 @@
 package org.ktc2.cokaen.wouldyouin.feat_event.view
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
@@ -81,8 +89,22 @@ class EventDetailActivity : AppCompatActivity() {
                 binding.eventDescription.text = event.data?.content
                 binding.contactPhone.text = event.data?.host?.phone
                 binding.contactEmail.text = event.data?.host?.email
+                
+                event.data?.images?.firstOrNull()?.let { imageUrl ->
 
-                binding.posterImageUrl = event.data?.images?.firstOrNull()
+                    binding.posterImageUrl = imageUrl
+
+                    Glide.with(binding.root.context)
+                        .asBitmap()
+                        .load(imageUrl)
+                        .into(object : CustomTarget<Bitmap>() {
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                binding.blurImageView.setImageBitmap(resource)
+                                binding.blurImageView.setBlur(20)
+                            }
+                            override fun onLoadCleared(placeholder: Drawable?) {}
+                        })
+                }
                 binding.organizerImageUrl = event.data?.host?.profileImageUrl
             }
         }

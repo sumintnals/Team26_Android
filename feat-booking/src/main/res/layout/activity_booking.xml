@@ -36,6 +36,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_gravity="center"
                 android:text="예매내역"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 

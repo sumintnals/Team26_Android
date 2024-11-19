@@ -50,6 +50,7 @@ class EventReviewViewModel @Inject constructor(
 
     init {
         loadPendingReviewList()
+        loadCompleteReviewList()
     }
 
     fun loadPendingReviewList(page: Int = currentEventPage, size: Int = 10) {

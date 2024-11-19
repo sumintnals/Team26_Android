@@ -25,7 +25,7 @@ class BookingAdapter(
 
             val reservationDate = DateTimeUtils.formatDetailTimeString(reservation.reservationDate)
             val eventDate = DateTimeUtils.formatDetailTimeString(reservation.event.startTime)
-            binding.reservationDate.text = reservationDate
+            binding.reservationDate.text = "${reservationDate} 예매"
             binding.eventStartTime.text = eventDate
             Log.d("Binding", reservation.event.location.detailAddress)
             binding.eventLocation.text = reservation.event.location.detailAddress

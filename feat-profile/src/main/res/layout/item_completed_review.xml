@@ -82,6 +82,7 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:src="@drawable/xmark"
+                android:visibility="gone"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"

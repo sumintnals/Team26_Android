@@ -22,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.ktc2.cokaen.wouldyouin.core.ToastUtils
 import org.ktc2.cokaen.wouldyouin.feat_profile.R
+import org.ktc2.cokaen.wouldyouin.feat_profile.adapter.CompletedReviewAdapter
 import org.ktc2.cokaen.wouldyouin.feat_profile.adapter.PendingReviewAdapter
 import org.ktc2.cokaen.wouldyouin.feat_profile.databinding.ActivityEventReviewBinding
 import org.ktc2.cokaen.wouldyouin.feat_profile.viewModel.EventReviewViewModel
@@ -30,8 +31,11 @@ import org.ktc2.cokaen.wouldyouin.feat_profile.viewModel.EventReviewViewModel
 class EventReviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventReviewBinding
     private val viewModel: EventReviewViewModel by viewModels()
-    private val reviewAdapter = PendingReviewAdapter { eventId ->
+    private val pendingReviewAdapter = PendingReviewAdapter { eventId ->
         showReviewDialog(eventId)
+    }
+    private val completedReviewAdapter = CompletedReviewAdapter { reviewId ->
+        deleteCompletedReview(reviewId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +69,7 @@ class EventReviewActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.pendingReviews.collect { reviews ->
-                        reviewAdapter.submitList(reviews)
+                        pendingReviewAdapter.submitList(reviews)
                         if (reviews.isEmpty()) {
                             binding.pendingReviewRecyclerView.visibility = View.GONE
                             binding.emptyPendingView.visibility = View.VISIBLE
@@ -89,13 +93,26 @@ class EventReviewActivity : AppCompatActivity() {
                         }
                     }
                 }
+
+                launch {
+                    viewModel.completedReviews.collect { reviews ->
+                        completedReviewAdapter.submitList(reviews)
+                        if (reviews.isEmpty()) {
+                            binding.completedReviewRecyclerView.visibility = View.GONE
+                            binding.emptyCompletedView.visibility = View.VISIBLE
+                        } else {
+                            binding.completedReviewRecyclerView.visibility = View.VISIBLE
+                            binding.emptyCompletedView.visibility = View.GONE
+                        }
+                    }
+                }
             }
         }
     }
 
     private fun setupRecyclerView() {
         binding.pendingReviewRecyclerView.apply {
-            adapter = reviewAdapter
+            adapter = pendingReviewAdapter
             layoutManager = LinearLayoutManager(this@EventReviewActivity)
 
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -111,8 +128,30 @@ class EventReviewActivity : AppCompatActivity() {
                 }
             })
         }
+
+        binding.completedReviewRecyclerView.apply {
+            adapter = completedReviewAdapter
+            layoutManager = LinearLayoutManager(this@EventReviewActivity)
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val totalItemCount = layoutManager.itemCount
+                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+
+                    if (!viewModel.reviewLoading.value && totalItemCount <= lastVisibleItem + 5) {
+                        viewModel.loadCompleteReviewList()
+                    }
+                }
+            })
+        }
     }
 
+    private fun deleteCompletedReview(reviewId: Long) {
+//        viewModel.deleteReview(reviewId)
+//        ToastUtils.showShortToast(this, "후기가 삭제되었습니다.")
+    }
     private fun showReviewDialog(eventId: Long) {
         ReviewDialog.newInstance(eventId)
             .show(supportFragmentManager, "review_dialog")

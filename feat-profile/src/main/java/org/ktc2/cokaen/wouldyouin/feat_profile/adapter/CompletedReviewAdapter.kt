@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import org.ktc2.cokaen.wouldyouin.core.ToastUtils
 import org.ktc2.cokaen.wouldyouin.data.model.ReviewResponse
 import org.ktc2.cokaen.wouldyouin.feat_profile.databinding.ItemCompletedReviewBinding
 
@@ -36,9 +37,9 @@ class CompletedReviewAdapter(
             binding.apply {
                 this.review = review
 
-
                 deleteButton.setOnClickListener {
                     onDeleteClick(review.id)
+                    ToastUtils.showShortToast(deleteButton.context, "후기가 삭제되었습니다.")
                 }
 
                 executePendingBindings()

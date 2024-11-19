@@ -26,23 +26,38 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:paddingBottom="16dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp">
 
-                <ImageView
-                    android:id="@+id/posterImage"
-                    android:layout_width="0dp"
-                    android:layout_height="300dp"
-                    android:scaleType="centerCrop"
+                <com.jgabrielfreitas.core.BlurImageView
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/blurImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerCrop"
+                    />
+
+                <ImageView
+                    android:id="@+id/posterImage"
+                    android:layout_width="190dp"
+                    android:layout_height="270dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/blurImageView"
+                    android:layout_marginTop="50dp"
+                    android:elevation="2dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     imageUrl="@{posterImageUrl}"/>
+
 
                 <ImageButton
                     android:id="@+id/leftArrow"
@@ -50,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/left_arrow"
                     android:background="@android:color/transparent"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/posterImage"
                     app:layout_constraintBottom_toBottomOf="@id/posterImage"
@@ -59,6 +75,7 @@
                     android:id="@+id/rightArrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:src="@drawable/right_arrow"
                     android:background="@android:color/transparent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -72,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="기획자 이름"
+                android:layout_marginHorizontal="20dp"
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@android:color/black"
@@ -83,6 +101,7 @@
                 android:layout_height="wrap_content"
                 android:text="행사 이름"
                 android:textStyle="bold"
+                android:layout_marginHorizontal="20dp"
                 android:textSize="22sp"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="8dp"/>
@@ -91,6 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
@@ -98,7 +118,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="8dp">
+                    >
 
                     <TextView
                         android:id="@+id/eventTime"
@@ -130,7 +150,6 @@
                         android:textSize="14sp"
                         android:textColor="@android:color/black"
                         android:drawableStart="@drawable/location"
-                        android:drawablePadding="4dp"
                         android:layout_marginTop="4dp"/>
 
                     <TextView
@@ -160,6 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="예매 현황"
+                android:layout_marginHorizontal="20dp"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
@@ -172,6 +192,7 @@
                 android:text="12/35"
                 android:textColor="@color/purple_200"
                 android:textSize="14sp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="16dp"
                 android:drawableStart="@drawable/personproflie"
                 android:drawablePadding="4dp"
@@ -184,6 +205,7 @@
                 android:text="위치정보"
                 android:textStyle="bold"
                 android:textSize="16sp"
+                android:layout_marginHorizontal="20dp"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="8dp"/>
             
@@ -200,6 +222,7 @@
                 android:text="주최자 정보"
                 android:textStyle="bold"
                 android:textSize="16sp"
+                android:layout_marginHorizontal="20dp"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="8dp"/>
 
@@ -207,6 +230,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="16dp">
 
                 <ImageView
@@ -258,6 +282,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="행사 설명"
+                android:layout_marginHorizontal="20dp"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
@@ -269,6 +294,7 @@
                 android:layout_height="wrap_content"
                 android:text="전남대학교 공과대학 밴드 동아리 '새벽울림'이 14번째 정기 공연으로 찾아옵니다."
                 android:textSize="14sp"
+                android:layout_marginHorizontal="20dp"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="16dp"/>
 
@@ -278,6 +304,7 @@
                 android:layout_height="wrap_content"
                 android:text="문의"
                 android:textStyle="bold"
+                android:layout_marginHorizontal="20dp"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="8dp"/>
@@ -286,6 +313,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="16dp">
 
                 <ImageView
@@ -310,6 +338,7 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/mail"
                 android:text="chldnntkd@kakao.com"
+                android:layout_marginHorizontal="20dp"
                 android:textSize="14sp"
                 android:textColor="@android:color/black"/>
 
@@ -323,6 +352,7 @@
                 android:background="@drawable/rounded_background"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="24dp"/>
         </LinearLayout>
 

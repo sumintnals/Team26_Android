@@ -5,7 +5,6 @@ import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyKakaoPayReservationR
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyReservationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyReservationSliceResponse
 import org.ktc2.cokaen.wouldyouin.data.model.KakaoPayReservationResponse
-import org.ktc2.cokaen.wouldyouin.data.model.ReservationCreateRequestWrapper
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -29,9 +28,9 @@ interface ReservationAPIRetrofitService {
     // 예매 생성
     @POST("/api/reservations/test")
     suspend fun createReservation(
-        //@Query("memberId") memberId: Long = 18,
         @Body request: ReservationRequest
     ): Response<ApiResponseBodyReservationResponse>
+
 
     //카카오 결제
     @POST("/api/reservations")

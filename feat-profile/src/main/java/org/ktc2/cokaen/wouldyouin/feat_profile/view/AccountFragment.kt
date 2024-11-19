@@ -50,7 +50,7 @@ class AccountFragment : Fragment() {
             }
 
             ask.setOnClickListener {
-                openWebPage("https://www.google.com")
+                openWebPage("\"https://oval-learning-685.notion.site/142f26889c56808b8e60fd6a603cfd89?pvs=74\"")
             }
 
             logout.setOnClickListener{

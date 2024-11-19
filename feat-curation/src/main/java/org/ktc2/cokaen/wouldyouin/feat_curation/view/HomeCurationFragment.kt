@@ -85,7 +85,7 @@ class HomeCurationFragment : Fragment() {
             binding.swipeRefresh.isRefreshing = false
         }
 
-//        binding.createCurationButton.visibility = if (authPrefs.memberType == MemberType.curator.name) View.VISIBLE else View.GONE
+        binding.createCurationButton.visibility = if (authPrefs.memberType == MemberType.curator.name) View.VISIBLE else View.GONE
 
         // RecyclerView에 Adapter 설정
         binding.curationCard.apply {

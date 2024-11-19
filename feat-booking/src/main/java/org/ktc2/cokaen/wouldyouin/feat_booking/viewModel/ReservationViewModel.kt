@@ -55,6 +55,9 @@ class ReservationViewModel @Inject constructor(
     private val _kakaoPayResponse = MutableLiveData<KakaoPayReservationResponse?>()
     val kakaoPayResponse: LiveData<KakaoPayReservationResponse?> get() = _kakaoPayResponse
 
+    private val _kakaoPayLiveData = MutableLiveData<KakaoPayReservationResponse?>()
+    val kakaoPayLiveData: LiveData<KakaoPayReservationResponse?> = _kakaoPayLiveData
+
     // 전체 예약 목록을 가져오는 메서드
     fun fetchReservationList(page: Int = currentPage, size: Int = 10) {
         if (isLoading.value == true || isLastPage) return
@@ -128,4 +131,18 @@ class ReservationViewModel @Inject constructor(
             }
         }
     }*/
+
+    /*
+    fun getKakaoPayData() {
+        viewModelScope.launch {
+            val response = repository.fetchKakaoPayData()
+            if (response != null) {
+                Log.d("KakaoPayViewModel", "KakaoPay data received: $response")
+                _kakaoPayLiveData.postValue(response)
+            } else {
+                Log.e("KakaoPayViewModel", "Failed to fetch KakaoPay data")
+            }
+        }
+    }*/
+
 }

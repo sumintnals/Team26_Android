@@ -4,6 +4,7 @@ import okhttp3.ResponseBody
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyKakaoPayReservationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyReservationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ApiResponseBodyReservationSliceResponse
+import org.ktc2.cokaen.wouldyouin.data.model.KakaoPayReservationResponse
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationCreateRequestWrapper
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -32,18 +33,11 @@ interface ReservationAPIRetrofitService {
         @Body request: ReservationRequest
     ): Response<ApiResponseBodyReservationResponse>
 
-
-    //첫번째 방법
+    //카카오 결제
     @POST("/api/reservations")
     suspend fun createKakaoPay(
         @Body request: ReservationRequest
     ): Response<ResponseBody> //Response<String>
-    /*
-    //두번째 방법
-    @POST("/api/reservations")
-    suspend fun createKakaoPay(
-        @Body request: ReservationRequest
-    ): Response<Void>*/
 
     @GET("/api/reservations/{reservationId}")
     suspend fun getReservation(

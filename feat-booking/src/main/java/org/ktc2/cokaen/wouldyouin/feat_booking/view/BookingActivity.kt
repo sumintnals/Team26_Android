@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import org.ktc2.cokaen.wouldyouin.core.DateTimeUtils
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationCreateRequestWrapper
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationRequest
 import org.ktc2.cokaen.wouldyouin.feat_booking.databinding.ActivityBookingBinding
@@ -44,7 +45,7 @@ class BookingActivity : AppCompatActivity() {
                 binding.eventName.text = event.title
                 binding.eventOrganizerName.text = event.host.nickname
                 binding.eventLocation.text = event.location.detailAddress
-                binding.eventDate.text = event.startTime.toString()
+                binding.eventDate.text = DateTimeUtils.formatDetailTimeString(event.startTime)
                 //binding.price.text = "₩${event.price}"
 
                 // 첫 가격 설정

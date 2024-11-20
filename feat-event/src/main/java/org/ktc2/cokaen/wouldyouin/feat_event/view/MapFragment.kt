@@ -275,7 +275,7 @@ class MapFragment : Fragment() {
         binding.placeTags.text = event.host.hashtags.joinToString(" ")
         binding.placeAddress.text = event.location.detailAddress
         binding.placeDatetime.text = event.startTime.let(DateTimeUtils::formatDateTimeString)
-        binding.imageUrl = event.host.profileImageUrl
+        binding.imageUrl = event.thumbnailUrl
     }
 
     override fun onResume() {

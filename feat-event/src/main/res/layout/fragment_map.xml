@@ -97,11 +97,11 @@
 
                 <ImageView
                     android:id="@+id/place_logo"
-                    android:layout_width="100dp"
+                    android:layout_width="70dp"
                     android:layout_height="100dp"
                     android:layout_marginStart="8dp"
                     android:scaleType="fitCenter"
-                    circleImageUrl="@{imageUrl}" />
+                    imageUrl="@{imageUrl}" />
 
             </LinearLayout>
 

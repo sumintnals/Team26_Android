@@ -56,7 +56,7 @@
 
                 <data
                     android:host="booking"
-                    android:pathPattern="/payment/check/.*"
+                    android:pathPattern="/kakao/check/.*"
                     android:scheme="wouldyouin" />
             </intent-filter>
         </activity>

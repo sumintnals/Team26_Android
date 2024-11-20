@@ -131,7 +131,7 @@ class BookingActivity : AppCompatActivity() {
         val uri = intent.data
         if (uri != null && uri.scheme == "wouldyouin" && uri.host == "booking") {
             val path = uri.path
-            if (path?.startsWith("/payment/check") == true) {
+            if (path?.startsWith("/kakao/check") == true) {
                 val action = path.substringAfterLast("/")
                 val reservationId = uri.getQueryParameter("reservationId")?.toLongOrNull()
                 //val reservationId = reservationIdFromApi

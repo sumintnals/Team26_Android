@@ -17,7 +17,7 @@
 
     <!-- Booking  -->
     <string name="booking_deeplink_url">wouldyouin://booking</string>
-    <string name="payment_check_deeplink_url">wouldyouin://booking/payment/check</string>
+    <string name="payment_check_deeplink_url">wouldyouin://booking/kakao/check</string>
     <string name="booking_lists_deeplink_url">wouldyouin://booking/list</string>
     <string name="booking_details_deeplink_url">wouldyouin://booking/details</string>
 

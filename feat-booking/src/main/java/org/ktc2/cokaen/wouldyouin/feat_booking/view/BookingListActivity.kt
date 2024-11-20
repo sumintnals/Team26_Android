@@ -135,7 +135,7 @@ class BookingListActivity : AppCompatActivity() {
     private fun startActivityTo(reservationId: Long) {
         val command = NavigationCommand(
             destination = NavigationDestination.Activity(DeepLinkDestinations.DETAIL_BOOKING_ACTIVITY),
-            data = mapOf("reservationId" to reservationId.toString()),
+            data = mapOf("reservationId" to reservationId),
             activityOptions = ActivityNavigationOptions(
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             )

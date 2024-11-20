@@ -116,7 +116,7 @@ class BookingFragment : Fragment() {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK,
                     clearTop = true
                 ),
-                data = mapOf("reservationId" to reservationId.toString())
+                data = mapOf("reservationId" to reservationId)
             )
         )
     }

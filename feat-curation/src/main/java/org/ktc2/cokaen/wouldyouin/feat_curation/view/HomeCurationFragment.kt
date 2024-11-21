@@ -165,7 +165,7 @@ class HomeCurationFragment : Fragment() {
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
-                if (!viewModel.isLoading.value!! && totalItemCount <= lastVisibleItem + 5) {
+                if (!viewModel.isLoading.value!! && totalItemCount <= lastVisibleItem + 2) {
                     viewModel.loadCurationList()
                 }
             }

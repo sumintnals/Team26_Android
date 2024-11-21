@@ -89,11 +89,11 @@ open class CurationAPIRetrofitRepository @Inject constructor(
     suspend fun getCurationList(
         area: String = "전체",
         page: Int = 0,
-        size: Int = 3,
+        size: Int = 10,
         lastId: Long = Long.MAX_VALUE
     ): CurationSliceResponse {
         try {
-            val response = curationRetrofitService.getCurationList(area, page, 3, lastId)
+            val response = curationRetrofitService.getCurationList(area, page, 10, lastId)
             return when {
                 response.isSuccessful -> {
                     response.body()?.let { body ->

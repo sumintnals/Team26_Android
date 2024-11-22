@@ -150,6 +150,15 @@ class BookingActivity : AppCompatActivity() {
                         Log.d("BookingActivity", "ReservationId to pass: $reservationId")
 
                         if (reservationId != null) {
+
+                            binding.root.postDelayed({
+                                val intent = Intent(this, BookingDetailsActivity::class.java).apply {
+                                    putExtra("reservationId", reservationId.toString())
+                                }
+                                startActivity(intent)
+                                Log.d("BookingActivity", "Navigated to BookingDetailsActivity with ID: $reservationId")
+                            }, 7000) // 7초 딜레이
+                        }
                             /*
                         reservationId?.let {
                             Log.d("BookingActivity", "Navigating to BookingDetailsActivity with reservationId: $reservationId")
@@ -159,6 +168,7 @@ class BookingActivity : AppCompatActivity() {
                             startActivity(intent)
                         }*/
 
+                            /*
                             val intent =
                                 Intent(this, BookingDetailsActivity::class.java).apply {
                                     putExtra("reservationId", reservationId.toString())
@@ -171,7 +181,7 @@ class BookingActivity : AppCompatActivity() {
                             startActivity(intent)
                         } else {
                             Log.e("BookingActivity", "ReservationId is null")
-                        }
+                        }*/
                     } else {
                         Log.e("BookingActivity", "예매 생성 실패: ${response?.message}")
                         Log.e("BookingActivity", "Response Code: ${response?.code}")

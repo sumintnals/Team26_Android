@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
 import org.json.JSONObject
 import org.ktc2.cokaen.wouldyouin.core.DateTimeUtils
+import org.ktc2.cokaen.wouldyouin.core.ToastUtils
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationCreateRequestWrapper
 import org.ktc2.cokaen.wouldyouin.data.model.ReservationRequest
 import org.ktc2.cokaen.wouldyouin.feat_booking.databinding.ActivityBookingBinding
@@ -80,7 +81,7 @@ class BookingActivity : AppCompatActivity() {
             }
         }
 
-
+/*
         binding.payButton.setOnClickListener {
             eventId?.let { id ->
                 val quantity = binding.numberPicker.value
@@ -103,6 +104,81 @@ class BookingActivity : AppCompatActivity() {
             } ?: run {
                 Log.e("BookingActivity", "Event ID is null")
                 Toast.makeText(this, "이벤트 ID를 확인할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }*/
+        binding.payButton.setOnClickListener {
+            eventId?.let { id ->
+
+                //원본
+                val quantity = binding.numberPicker.value
+                val reservationRequest = ReservationRequest(eventId = id, quantity = quantity)
+                //val requestWrapper = ReservationCreateRequestWrapper(reservationRequest = reservationRequest)
+                //val memberId = 18L
+
+                Log.d("BookingActivity", "RequestWrapper: $reservationRequest")
+
+                /*
+            // 카카오 결제 API 호출
+            reservationViewModel.createKakaoPay(memberId, reservationRequest)
+            Log.d("BookingActivity", "Request Body: $reservationRequest")
+            */
+
+                reservationViewModel.createReservation(reservationRequest)
+                Log.d("BookingActivity", "Request Body: $reservationRequest")
+
+                // KakaoPay 결제 URL 요청
+                reservationViewModel.createKakaoPay(reservationRequest)
+
+                // KakaoPay URL 관찰
+                reservationViewModel.kakaoPayResponse.observe(this) { redirectUrl ->
+                    redirectUrl?.let {
+                        launchExternalBrowser(it) // 브라우저로 URL 이동
+                    } ?: run {
+                        ToastUtils.showShortToast(this, "결제 URL을 불러오지 못했습니다.")
+                    }
+                }
+
+                reservationViewModel.reservationResponse.observe(this) { response ->
+                    //reservationViewModel.payResponse.observe(this) { response ->
+                    if (response?.success == true) {
+                        Log.d(
+                            "BookingActivity",
+                            "Reservation created successfully: ${response.data}"
+                        )
+                        val reservationId = response.data?.id
+                        //val reservationId = response.data?.reservationResponse?.id
+                        Log.d("BookingActivity", "ReservationId to pass: $reservationId")
+
+                        if (reservationId != null) {
+                            /*
+                        reservationId?.let {
+                            Log.d("BookingActivity", "Navigating to BookingDetailsActivity with reservationId: $reservationId")
+                            val intent = Intent(this, BookingDetailsActivity::class.java).apply {
+                                putExtra("reservationId", reservationId.toString())
+                            }
+                            startActivity(intent)
+                        }*/
+
+                            val intent =
+                                Intent(this, BookingDetailsActivity::class.java).apply {
+                                    putExtra("reservationId", reservationId.toString())
+                                }
+
+                            Log.d(
+                                "BookingActivity",
+                                "Passing ReservationId to Intent: $reservationId"
+                            )
+                            startActivity(intent)
+                        } else {
+                            Log.e("BookingActivity", "ReservationId is null")
+                        }
+                    } else {
+                        Log.e("BookingActivity", "예매 생성 실패: ${response?.message}")
+                        Log.e("BookingActivity", "Response Code: ${response?.code}")
+                        Log.e("BookingActivity", "Response Body: ${response?.message}")
+                        ToastUtils.showShortToast(this@BookingActivity, "남은 좌석이 부족합니다.")
+                    }
+                }
             }
         }
     }
